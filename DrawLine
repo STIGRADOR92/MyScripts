@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DrawLine : MonoBehaviour
+{
+    GameObject[] movePoints;
+
+    private void OnDrawGizmos()
+    {
+        for (var i = 1; i < movePoints.Length; i++)
+        {
+            Gizmos.DrawLine(movePoints[i - 1].transform.position, movePoints[i].transform.position);
+        }
+    }
+}
