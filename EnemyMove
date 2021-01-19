@@ -1,0 +1,50 @@
+using UnityEngine;
+
+public class Enemy : MonoBehaviour
+{
+    [SerializeField]
+    GameObject[] movePoints;
+    [SerializeField]
+    float heals;
+    [SerializeField]
+    float speed;
+    [SerializeField]
+    float lvl;
+
+    int target = 0;
+
+    private void Update()
+    {
+        EnemyMove();
+    }
+
+    void EnemyMove()
+    {
+            if (target < movePoints.Length)
+                transform.position = Vector2.MoveTowards(transform.position, movePoints[target].transform.position, GetSpeed() * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "MovePoint") target++;
+        else if (collision.tag == "Finish")
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public float GetHeals()
+    {
+        return heals;
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
+    }
+
+    public float GetLvl()
+    {
+        return lvl;
+    }
+}
