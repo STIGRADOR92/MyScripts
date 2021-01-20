@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
                 transform.position = Vector2.MoveTowards(transform.position, movePoints[target].transform.position, GetSpeed() * Time.deltaTime);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "MovePoint") target++;
         else if (collision.tag == "Finish")
@@ -33,18 +33,27 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public float GetHeals()
+    public float GetHeals
     {
-        return heals;
+        get
+        {
+            return heals;
+        }
     }
 
-    public float GetSpeed()
+    public float GetSpeed
     {
-        return speed;
+        get
+        {
+            return speed;
+        }
     }
 
-    public float GetLvl()
+    public float GetLvl
     {
-        return lvl;
+        get
+        {
+            return lvl;
+        }
     }
 }
