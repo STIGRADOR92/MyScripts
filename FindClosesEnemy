@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class Rotate : MonoBehaviour
+{
+    [SerializeField]
+    GameObject[] enemy;
+    GameObject closest;
+    [SerializeField]
+    string name;
+
+    void Update()
+    {
+        enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        FindClosesEnemy();
+        
+    }
+
+    GameObject FindClosesEnemy()
+    {
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach(GameObject go in enemy)
+        {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < distance)
+            {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+        name = closest.name;
+        return closest;
+    }
+}
