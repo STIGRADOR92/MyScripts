@@ -1,1 +1,101 @@
+using Photon.Pun;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
+public class PlayerController : MonoBehaviour, IPunObservable
+{
+    private PhotonView photonView;
+    private bool facingRight = true;
+    private bool facingUp = true;
+
+    void Start()
+    {
+        photonView = GetComponent<PhotonView>();
+    }
+
+    // Если действие совершается нами, то позволяем фотону их отслеживать "передавать" другим игрком
+    void Update()
+    {
+        if (photonView.IsMine)
+        {
+            PlayerMove();
+            Flip();
+        }
+    }
+
+    // Передача состояния других персонажей (куда смотрят, что делают и т. д.)
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(facingRight);
+            stream.SendNext(facingUp);
+        }
+        else
+        {
+            facingRight = (bool)stream.ReceiveNext();
+            facingUp = (bool)stream.ReceiveNext();
+        }
+    }
+
+    // Движение персонажа
+    private void PlayerMove()
+    {
+        if (Input.GetKey(KeyCode.A))
+        {
+            facingRight = true;
+            transform.Translate(-Time.deltaTime * 5, 0, 0);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            facingRight = false;
+            transform.Translate(Time.deltaTime * 5, 0, 0);
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            facingUp = true;
+            transform.Translate(0, Time.deltaTime * 5, 0);
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+             facingUp = false;
+            transform.Translate(0, -Time.deltaTime * 5, 0);
+        }
+    }
+
+    // Поворот персонажа
+    private void Flip()
+    {
+        if (facingRight)
+        {
+            Vector2 Scaler = transform.localScale;
+            Scaler.x = 1;
+            transform.localScale = Scaler;
+        }
+
+        if (!facingRight)
+        {
+            Vector2 Scaler = transform.localScale;
+            Scaler.x = -1;
+            transform.localScale = Scaler;
+        }
+
+        if (facingUp)
+        {
+            Vector2 Scaler = transform.localScale;
+            Scaler.y = 1;
+            transform.localScale = Scaler;
+        }
+
+        if (!facingUp)
+        {
+            Vector2 Scaler = transform.localScale;
+            Scaler.y = -1;
+            transform.localScale = Scaler;
+        }
+    }
+}
